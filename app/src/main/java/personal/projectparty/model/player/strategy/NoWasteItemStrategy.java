@@ -1,0 +1,50 @@
+/*
+ * MIT License
+ *
+ * Copyright (c) 2025 Fabio Broccati
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package personal.projectparty.model.player.strategy;
+
+import personal.projectparty.model.item.GameItem;
+import personal.projectparty.engine.GameEngine;
+import personal.projectparty.model.player.ComputerPlayer;
+import personal.projectparty.model.item.*;
+import java.util.List;
+import java.util.Optional;
+
+public class NoWasteItemStrategy implements ItemStrategy{
+
+    @Override
+    public Optional<GameItem> chooseItem(List<GameItem> inventory, GameEngine engine, ComputerPlayer player) {
+        GameItem cometStar = player.findItemOfType(CometStarItem.class);
+
+        for(GameItem item : inventory){
+            if(cometStar!=null && player.getCoins()>=20) return Optional.of(cometStar);
+            else{
+                if(item instanceof CometStarItem) continue;
+                else { return Optional.of(item); }
+            }
+
+        }
+        return Optional.empty();
+    }
+}
