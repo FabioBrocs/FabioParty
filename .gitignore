@@ -3,3 +3,11 @@
 
 # Ignore Gradle build output directory
 build
+
+# Escludi la cartella portable-exe
+portable-exe/
+
+# Escludi file di log, temporanei e cache
+*.log
+*.tmp
+.DS_Store
