@@ -96,7 +96,7 @@ public class MathMinigame extends AbstractMinigame {
         ui.showMessage(equation.toString());
 
         while (timerRunning.get()) {
-            String input = ui.getInput();
+            String input = ui.askString("");
 
             if (!timerRunning.get()) break;
 

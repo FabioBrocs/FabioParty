@@ -89,7 +89,7 @@ public class StringMinigame extends AbstractMinigame{
 
 
         while (timerRunning.get()) {
-            String input = ui.getInput();
+            String input = ui.askString("");
 
             if (!timerRunning.get()) break;
 

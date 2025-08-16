@@ -215,8 +215,18 @@ public class GameEngine {
         Map<AbstractPlayer, Integer> rolls = new HashMap<>();
 
         for (AbstractPlayer player : players) {
+            int roll = 0;
             ui.showMessage(">It's your turn " + player.getName());
-            int roll = player.isHuman() ? ui.rollDiceHuman(1) : ui.rollDiceCPU(1);
+            if(player.isHuman()) {
+                ui.showMessage(">Press Enter to roll the dice...");
+                ui.waitForInput();
+                roll = rollDice();
+            }
+            else {
+                ui.showMessage(player.getName() + " is rolling the dice...");
+                roll = rollDice();
+            }
+
             ui.showMessage(">"+ player.getName() + " rolled a " + roll + "\n");
             rolls.put(player, roll);
         }
@@ -227,6 +237,10 @@ public class GameEngine {
         for (int i = 0; i < players.size(); i++) {
             ui.showMessage((i + 1) + ". " + players.get(i).getName());
         }
+    }
+
+    private int rollDice() {
+        return random.nextInt(6) + 1;
     }
 
     private void turnHandler() {
@@ -288,15 +302,22 @@ public class GameEngine {
         }
 
         triggerBeforeDiceRoll(player);
-        int diceCount = player.getDiceToRoll();
-        int roll = ui.rollDiceHuman(diceCount);
-        if(roll!=0) ui.showMessage(">"+ player.getName() + " rolled " + roll);
+        int diceNumber = player.getDiceToRoll();
+        int roll = 0, totalRoll = 0;
+        for(int i=0; i<diceNumber; i++) {
+            ui.showMessage(">Press Enter to roll the dice...");
+            ui.waitForInput();
+            roll = rollDice();
+            totalRoll += roll;
+            ui.showMessage(">"+ player.getName() + " rolled " + roll);
+        }
+        if(diceNumber>1) ui.showMessage(">Total roll: " + totalRoll);
         ui.waitSeconds(1);
-        triggerAfterDiceRoll(player, roll);
-        List<AbstractPlayer> passedPlayers = board.getPlayersPassed(player, players, roll);
+        triggerAfterDiceRoll(player, totalRoll);
+        List<AbstractPlayer> passedPlayers = board.getPlayersPassed(player, players, totalRoll);
         for (AbstractPlayer passed : passedPlayers) {
             triggerPassPlayer(player, passed);}
-        movePlayer(player, roll);
+        movePlayer(player, totalRoll);
         triggerTurnEnd(player);
         player.cleanupPlayerEffects();
         ui.waitSeconds(2);
@@ -308,19 +329,23 @@ public class GameEngine {
             useItem(player, player.useItemStrategy(this));
         }
         triggerBeforeDiceRoll(player);
-        int diceCount = player.getDiceToRoll();
-        int roll = ui.rollDiceCPU(diceCount);
-        if(roll!=0) {
+        int diceNumber = player.getDiceToRoll();
+        int roll = 0, totalRoll = 0;
+        for(int i=0; i<diceNumber; i++) {
+            roll = rollDice();
             ui.showMessage(">"+ player.getName() + " is rolling the dice...");
             ui.waitSeconds(1);
+            totalRoll += roll;
             ui.showMessage(">"+ player.getName() + " rolled a " + roll);
-            ui.waitSeconds(1);
         }
-        triggerAfterDiceRoll(player, roll);
-        List<AbstractPlayer> passedPlayers = board.getPlayersPassed(player, players, roll);
+        if(diceNumber>1) ui.showMessage(">Total roll: " + totalRoll);
+        ui.waitSeconds(1);
+
+        triggerAfterDiceRoll(player, totalRoll);
+        List<AbstractPlayer> passedPlayers = board.getPlayersPassed(player, players, totalRoll);
         for (AbstractPlayer passed : passedPlayers) {
             triggerPassPlayer(player, passed);}
-        movePlayer(player, roll);
+        movePlayer(player, totalRoll);
         triggerTurnEnd(player);
         player.cleanupPlayerEffects();
         ui.waitSeconds(2);
@@ -352,7 +377,7 @@ public class GameEngine {
                     ui.showMessage(">The Star has moved!");
                     ui.waitSeconds(1);
                 }
-            }else {ui.showMessage(player.getName() + " doesn't have enough coins to buy a star..."); ui.waitSeconds(1);}
+            }else {ui.showMessage(">"+player.getName() + " doesn't have enough coins to buy a star..."); ui.waitSeconds(1);}
         }
 
         ui.showMessage(">"+ player.getName() + " moved to: " + board.getSpaceTypeFromIndex(newPosition) + " Space.");

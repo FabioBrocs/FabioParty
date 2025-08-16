@@ -41,6 +41,7 @@ public class ComputerPlayer extends AbstractPlayer{
         this.itemStrategy = setStrategyBasedOnDifficulty();
         isHuman = false;
 
+
     }
 
     private ItemStrategy setStrategyBasedOnDifficulty(){

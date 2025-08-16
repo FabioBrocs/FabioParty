@@ -24,7 +24,13 @@
 
 package personal.projectparty.ui;
 
+import java.util.List;
+import personal.projectparty.model.board.Board;
+import personal.projectparty.model.player.AbstractPlayer;
 
-public interface UserInterface extends MessageDisplay, InputHandler, GameDisplay {
-    void askStart(String message);
+public interface GameDisplay {
+    void displayBoard(Board board, List<AbstractPlayer> players);
+    void displayLeaderboard(List<AbstractPlayer> players);
+    void displayFinalLeaderboard(List<AbstractPlayer> players);
+    void displayPlayerInfo(AbstractPlayer player);
 }

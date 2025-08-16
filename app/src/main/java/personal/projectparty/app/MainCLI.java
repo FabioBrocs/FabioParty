@@ -29,7 +29,7 @@ import personal.projectparty.engine.GameEngine;
 
 public class MainCLI {
     public static void main(String[] args) {
-        UserInterface ui = new personal.projectparty.ui.CLI();
+        UserInterface ui = new personal.projectparty.ui.terminal.CLI();
         GameEngine engine = new GameEngine(ui);
         engine.start();
     }
