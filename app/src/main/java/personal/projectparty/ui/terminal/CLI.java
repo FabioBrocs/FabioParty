@@ -22,23 +22,23 @@
  * SOFTWARE.
  */
 
-package personal.projectparty.ui;
+package personal.projectparty.ui.terminal;
 
 import java.util.Scanner;
 import java.util.Random;
 import java.util.List;
-import java.util.Comparator;
 import java.util.Optional;
 import personal.projectparty.model.board.Board;
 import personal.projectparty.model.board.Space;
 import personal.projectparty.model.player.AbstractPlayer;
+import personal.projectparty.ui.UserInterface;
 
 import static java.lang.Thread.sleep;
 
-public class CLI implements UserInterface{
+public class CLI implements UserInterface {
 
     private final Scanner scanner = new Scanner(System.in);
-    Random random = new Random();
+    //Random random = new Random();
 
     @Override
     public void showMessage(String message) {
@@ -52,15 +52,8 @@ public class CLI implements UserInterface{
     }
 
     @Override
-    public String getInput(){
-        return scanner.nextLine();
-    }
-
-    @Override
-    public void onRollDice(Runnable action) {
-        showMessage("Press ENTER to roll the dice");
+    public void waitForInput(){
         scanner.nextLine();
-        action.run();
     }
 
     @Override
@@ -70,7 +63,7 @@ public class CLI implements UserInterface{
     }
 
     @Override
-    public Integer askNumber(Integer min, Integer max) {
+    public int askNumber(int min, int max) {
         showMessage("Please enter a number between " + min + " and " + max);
         String input = scanner.nextLine();
         try {
@@ -94,6 +87,12 @@ public class CLI implements UserInterface{
             return askYesNo(message);
         }
     }
+/*
+    @Override
+    public void askRollDice(){
+        showMessage("Press ENTER to roll the dice");
+        scanner.nextLine();
+    }
 
     @Override
     public Integer rollDiceHuman(Integer diceNumber) {
@@ -114,12 +113,12 @@ public class CLI implements UserInterface{
         }
         waitSeconds(1);
         return sum;
-    }
+    }*/
 
     @Override
-    public void waitSeconds(Integer milliseconds) {
+    public void waitSeconds(int milliseconds) {
         try {
-            sleep(milliseconds*1000);
+            sleep(milliseconds* 1000L);
         } catch (InterruptedException ignored) {}
     }
 
@@ -140,7 +139,7 @@ public class CLI implements UserInterface{
                     .filter(p -> p.getPosition() == finalI).findFirst();
 
             if (playerOnSpace.isPresent()) {
-                String initials = "";
+                String initials;
                 AbstractPlayer player = playerOnSpace.get();
                 if(!player.isHuman()) { initials = String.valueOf(playerOnSpace.get().getName().charAt(0))
                         .concat(String.valueOf(playerOnSpace.get().getName().charAt(3)));}

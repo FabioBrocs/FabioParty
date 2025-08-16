@@ -25,6 +25,9 @@
 package personal.projectparty.ui;
 
 
-public interface UserInterface extends MessageDisplay, InputHandler, GameDisplay {
-    void askStart(String message);
+public interface InputHandler {
+    String askString(String message);
+    int askNumber(int min, int max);
+    boolean askYesNo(String message);
+    void waitForInput();
 }
